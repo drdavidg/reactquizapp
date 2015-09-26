@@ -6,7 +6,6 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/react.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/JSXTransformer.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-
 	</head>
 	<body>
 		<div id="content"></div>
@@ -17,15 +16,14 @@
 
 			return (
 				<div className="questionsbox">
-					<Question quiz={quiz} />
-
+					<QuestionPrompt quiz={quiz} />
+					<Choices quiz={quiz} />
 				</div>
 			);
 		}
-
 	});
 
-	var Question = React.createClass({
+	var QuestionPrompt = React.createClass({
 		//the question/prompt being asked
 		render: function() {
 
@@ -37,9 +35,24 @@
 
 	var Choices = React.createClass({
 		//the 4 multiple choice potential answers
+		handleRightWrong: function(e) {//TODO do i have to set this variable somewhere else to initialize it?
+			//check if selected choice (button clicked) event is right answer or not
+			e.preventDefault();
+			console.log("check answer function");
+			console.log(this.refs.choice1.props.children);
+		},
 		render: function() {
 
-			return ;
+			return (
+				<div>
+					<ul>
+						<li><button ref="choice1" onClick={this.handleRightWrong}>{this.props.quiz[0].choices[0]}</button></li>
+						<li><button>{this.props.quiz[0].choices[1]}</button></li>
+						<li><button>{this.props.quiz[0].choices[2]}</button></li>
+						<li><button>{this.props.quiz[0].choices[3]}</button></li>
+					</ul>
+				</div>
+			);
 		}
 	});
 
@@ -97,7 +110,7 @@ var quiz = [
 ];
 
 React.render(
-	<Question quiz={quiz} />,
+	<QuestionsBox quiz={quiz} />,
 	document.getElementById('content')
 );
 
