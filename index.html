@@ -11,13 +11,24 @@
 		<div id="content"></div>
   <script type="text/jsx">
 	var QuestionsBox = React.createClass({
-
+		getInitialState: function() {
+			return {
+				currentQuestion: 0,
+				answerSelections: [],
+				timePerQuestion: 10
+			}
+		},
+		nextQuestion: function() {
+			this.setState({
+				currentQuestion: this.state.currentQuestion + 1
+			})
+		},
 		render: function() {
 
 			return (
 				<div className="questionsbox">
-					<QuestionPrompt quiz={quiz} />
-					<Choices quiz={quiz} />
+					<QuestionPrompt quiz={quiz} currentQuestion={this.state.currentQuestion}/>
+					<Choices quiz={quiz} currentQuestion={this.state.currentQuestion} />
 				</div>
 			);
 		}
@@ -25,30 +36,53 @@
 
 	var QuestionPrompt = React.createClass({
 		//the question/prompt being asked
+		getInitialState: function() {
+			return {
+				currentQuestion: this.props.currentQuestion
+			}
+		},
+		componentDidMount: function() {
+
+		},
 		render: function() {
 
 			return (
-				<h1>{this.props.quiz[0].prompt}</h1>
+				<h1>{this.props.quiz[this.state.currentQuestion].prompt}</h1>
 			);
 		}
 	});
 
 	var Choices = React.createClass({
 		//the 4 multiple choice potential answers
+		getInitialState: function() {
+			return {
+				quiz: quiz,
+				currentQuestion: this.props.currentQuestion
+			}
+		},
 		handleRightWrong: function(e) {//TODO do i have to set this variable somewhere else to initialize it?
 			//check if selected choice (button clicked) event is right answer or not
 			e.preventDefault();
+			console.log(this);
 			console.log("check answer function");
 			console.log(this.refs.choice1.props.children);
+			console.log(this.props.quiz[0].answer);
+			console.log(e.target.value);
+			console.log("this.state.currentQuestion is  " + this.state.quiz.currentQuestion);
+			//this.setState({buttonStyle: buttonStyle});
+			if ((this.refs.choice3.props.children)===(this.props.quiz[0].answer)) {
+				console.log("answer checker");
+				this.setState()
+			}
 		},
-		render: function() {
+		render: function(currentQuestion) {
 
 			return (
 				<div>
 					<ul>
 						<li><button ref="choice1" onClick={this.handleRightWrong}>{this.props.quiz[0].choices[0]}</button></li>
 						<li><button>{this.props.quiz[0].choices[1]}</button></li>
-						<li><button>{this.props.quiz[0].choices[2]}</button></li>
+						<li><button ref="choice3" onClick={this.handleRightWrong}>{this.props.quiz[0].choices[2]}</button></li>
 						<li><button>{this.props.quiz[0].choices[3]}</button></li>
 					</ul>
 				</div>
