@@ -16,7 +16,8 @@
 				answerSelections: [],
 				timeLeft: this.props.timePerQuestion,
 				score: 0,
-				quizActive: true
+				quizActive: true,
+				results: []
 			}
 		},
 		getDefaultProps: function () {
@@ -27,13 +28,19 @@
 		choiceMade: function(id) {
 			var answers = this.state.answerSelections.slice();
 			answers.push(id);
+			var choiceResults = this.state.results.slice();
 
-			if (quiz[this.state.currentQuestion].answer == id) {
+
+			if (quiz[this.state.currentQuestion].answer == id) { //correct
 				var updatedScore = this.calcScore(this.state.timeLeft);
+				choiceResults.push(true);
 			}
-			else {
+			else {//incorrect choice
 				updatedScore = this.state.score;
+				choiceResults.push(false);
 			}
+
+
 			if ((quiz.length - 1) <= this.state.currentQuestion) {
 				clearInterval(this.timer);
 				quizActive = false;
@@ -47,7 +54,8 @@
 				answerSelections: answers,
 				timeLeft: this.props.timePerQuestion,
 				score: updatedScore,
-				quizActive: quizActive
+				quizActive: quizActive,
+				results: choiceResults
 			};
 			this.setState(newState);
 
@@ -65,7 +73,8 @@
 				answerSelections: this.state.answerSelections,
 				timeLeft: this.state.timeLeft - 1,
 				score: this.state.score,
-				quizActive: true
+				quizActive: true,
+				results: this.state.results
 			}
 			this.setState(newTimerState);
 		},
@@ -90,11 +99,27 @@
 						</div>
 						|| <FinalScore score={this.state.score} />
 				  }
-
+					<ScoreBoard results={this.state.results} />
 				</div>
 			);
 		}
 	});
+	var ScoreBoard = React.createClass({
+		render: function() {
+				var answerResults = this.props.results.map(function(result, i) {
+					return (
+						<li key={i}>{result ? "Correct" : "Incorrect"}</li>
+					);
+				});
+
+				return (
+					<ol>
+						{answerResults}
+					</ol>
+				);
+		}
+	});
+
 	var FinalScore = React.createClass({
 		render: function() {
 			return (
