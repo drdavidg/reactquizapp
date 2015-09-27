@@ -4,8 +4,8 @@
 		<meta charset="utf-8">
 		<title>Quizapp refactored to ReactJS</title>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/react.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/JSXTransformer.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    	<script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/JSXTransformer.js"></script>
+    	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> -->
 	</head>
 	<body>
 		<div id="content"></div>
@@ -18,25 +18,25 @@
 				timePerQuestion: 10
 			}
 		},
-		getDefaultProps: function () {
-			return {
-				quiz: quiz
-			}
-		},
-		nextQuestion: function(e) {
-			console.log("GOT TO NEXT QUESTION.  current state of currentQuestion is : " + this.state.currentQuestion);
-			var newArray = this.state.answerSelections.push("wrong");
-			this.setState({
-				currentQuestion: this.state.currentQuestion++,
-				answerSelections: newArray
-			})
-			console.log("now currentQuestion state is " + this.state.currentQuestion);
+		choiceMade: function(id) {
+			var answers = this.state.answerSelections.slice();
+			answers.push(id);
+
+			var newState = {
+				currentQuestion: this.state.currentQuestion + 1,
+				answerSelections: answers,
+				timePerQuestion: this.state.timePerQuestion
+			};
+
+			this.setState(newState);
 		},
 		render: function() {
+			var question = this.props.quiz[this.state.currentQuestion];
+
 			return (
 				<div className="questionsbox">
-					<QuestionPrompt quiz={quiz} currentQuestion={this.state.currentQuestion}/>
-					<Choices nextQuestion={this.nextQuestion} quiz={quiz} currentQuestion={this.state.currentQuestion} />
+					<QuestionPrompt question={question.prompt} />
+					<Choices choices={question.choices} onClick={this.choiceMade} />
 				</div>
 			);
 		}
@@ -45,22 +45,27 @@
 	var QuestionPrompt = React.createClass({
 		render: function() {
 			return (
-				<h1>{this.props.quiz[this.props.currentQuestion].prompt}</h1>
+				<h1>{this.props.question}</h1>
 			);
 		}
 	});
 
 	var Choices = React.createClass({
-		//the 4 multiple choice potential answers
-		render: function(questionNumber) {
+		render: function() {
+			var clickHandler = this.props.onClick;
+
+			var choices = this.props.choices.map(function(choice, i) {
+				return (
+					<li key={i}><button onClick={clickHandler.bind(null, i)}>{choice}</button></li>
+				);
+			});
+
+			// es6:
+			// var choices = this.props.choices.map((choice, i) => <li key={i}>{choice}</li>);
+
 			return (
 				<div>
-					<ul>
-						<li><button ref="choice1" onClick={this.props.nextQuestion()}>{this.props.quiz[0].choices[0]}</button></li>
-						<li><button>{this.props.quiz[0].choices[1]}</button></li>
-						<li><button ref="choice3" onClick={this.props.nextQuestion}>{this.props.quiz[0].choices[2]}</button></li>
-						<li><button>{this.props.quiz[0].choices[3]}</button></li>
-					</ul>
+					{choices}
 				</div>
 			);
 		}
@@ -70,12 +75,12 @@ var quiz = [
 	{
 		prompt: "What is Bran unable to do due to his injuries?",
 		choices: ["Sleep","Archery","Walk","Eat"],
-		answer: "Walk",
+		answer: 2
 	},
 	{
 		prompt: "Where is Theon Greyjoy tasked with raiding using only one ship by his father?",
 		choices: ["Villages along the Stony Shore","Coastal towns of Bear Island","Ports along Blazewater Bay","Cape Kraken"],
-		answer: "Villages along the Stony Shore"
+		answer: 0
 	},
 	{
 		prompt: "As Maester Luwin is dying, he tells Osha to take Rickon and Bran Stark to",
@@ -118,6 +123,10 @@ var quiz = [
 		answer: "Mance"
 	}
 ];
+
+|-> store -> component -> actions (events) -v
+|                                           |
+--------------------<-----------------------|
 
 React.render(
 	<QuestionsBox quiz={quiz} />,
