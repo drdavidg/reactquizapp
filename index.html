@@ -15,7 +15,8 @@
 				currentQuestion: 0,
 				answerSelections: [],
 				timeLeft: this.props.timePerQuestion,
-				score: 0
+				score: 0,
+				quizActive: true
 			}
 		},
 		getDefaultProps: function () {
@@ -24,7 +25,6 @@
 			};
   	},
 		choiceMade: function(id) {
-			// clearInterval(this.timer);
 			var answers = this.state.answerSelections.slice();
 			answers.push(id);
 
@@ -34,15 +34,23 @@
 			else {
 				updatedScore = this.state.score;
 			}
+			if ((quiz.length - 1) <= this.state.currentQuestion) {
+				clearInterval(this.timer);
+				quizActive = false;
+			}
+			else {
+				quizActive = true;
+			}
 
 			var newState = {
 				currentQuestion: this.state.currentQuestion + 1,
 				answerSelections: answers,
 				timeLeft: this.props.timePerQuestion,
-				score: updatedScore
+				score: updatedScore,
+				quizActive: quizActive
 			};
 			this.setState(newState);
-			// setInterval(this.tick, 1000);  //restart timer
+
 		},
 		calcScore: function(timeLeft) {
 			var newScore = this.state.score + 10;
@@ -56,7 +64,8 @@
 				currentQuestion: this.state.currentQuestion,
 				answerSelections: this.state.answerSelections,
 				timeLeft: this.state.timeLeft - 1,
-				score: this.state.score
+				score: this.state.score,
+				quizActive: true
 			}
 			this.setState(newTimerState);
 		},
@@ -64,24 +73,36 @@
 			this.timer = setInterval(this.tick, 1000);
 		},
 		componentDidUpdate: function() {
-			if (this.state.timeLeft < 0) {
-				// clearInterval(this.timer);
+			if (this.state.timeLeft < 0) { //check if time expired
 				this.choiceMade(false);
 			}
 		},
 		render: function() {
 			var question = this.props.quiz[this.state.currentQuestion];
-
 			return (
 				<div className="questionsbox">
-					<QuestionPrompt question={question.prompt} />
-					<Choices choices={question.choices} onClick={this.choiceMade} />
-					<Timer timeLeft={this.state.timeLeft} />
-					<Score score={this.state.score} />
+					{this.state.quizActive &&
+						<div>
+							<QuestionPrompt question={question.prompt} />
+							<Choices choices={question.choices} onClick={this.choiceMade} />
+							<Timer timeLeft={this.state.timeLeft} />
+							<Score score={this.state.score} />
+						</div>
+						|| <FinalScore score={this.state.score} />
+				  }
+
 				</div>
 			);
 		}
 	});
+	var FinalScore = React.createClass({
+		render: function() {
+			return (
+				<h1>FINAL Score: {this.props.score}</h1>
+			);
+		}
+	});
+
 	var Score = React.createClass({
 		render: function () {
 			return (
