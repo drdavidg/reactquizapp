@@ -96,6 +96,7 @@
 							<Choices choices={question.choices} onClick={this.choiceMade} />
 							<Timer timeLeft={this.state.timeLeft} />
 							<Score score={this.state.score} />
+							<QuestionImage currentQuestion={this.state.currentQuestion} />
 						</div>
 						|| <FinalScore score={this.state.score} />
 				  }
@@ -113,9 +114,12 @@
 				});
 
 				return (
-					<ol>
-						{answerResults}
-					</ol>
+					<div>
+						<h2>Scoreboard Results</h2>
+						<ol>
+							{answerResults}
+						</ol>
+					</div>
 				);
 		}
 	});
@@ -140,6 +144,14 @@
 		render: function() {
 			return (
 				<h2>Time Left: {this.props.timeLeft}</h2>
+			);
+		}
+	});
+
+	var QuestionImage = React.createClass({
+		render: function() {
+			return (
+				<img src={"img/" + (this.props.currentQuestion + 1) + ".jpg"}></img>
 			);
 		}
 	});
