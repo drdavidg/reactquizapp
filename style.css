@@ -1,0 +1,196 @@
+body {
+	background-color: black;
+	color: white;
+}
+.meter {
+	height: 20px;  /* Can be anything */
+	position: relative;
+	-moz-border-radius: 25px;
+	-webkit-border-radius: 25px;
+	border-radius: 25px;
+}
+.meter > span {
+  display: block;
+  height: 100%;
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+	background-color: #3698F0;
+  background-image: linear-gradient(
+    center bottom,
+    rgb(43,194,83) 37%,
+    rgb(84,240,84) 69%
+  );
+  box-shadow:
+    inset 0 2px 9px  rgba(255,255,255,0.3),
+    inset 0 -2px 6px rgba(0,0,0,0.4);
+  position: relative;
+  overflow: hidden;
+}
+@keyframes expandWidth {
+   0% { width: 0; }
+   100% { width: auto; }
+}
+.topcontent {
+	padding: 30px;
+	margin: 10px;
+}
+.timeleft {
+	margin: 10px 0 10px 0;
+	display: block;
+	text-transform: capitalize;
+	font-weight: 400;
+	color: #05788F;
+	text-align: center;
+	line-height: 1.2em;
+	font-size: 30px;
+	font-family: "Gotham SSm A","Gotham SSm B","Helvetica Neue",Helvetiva,Arial,sans-serif;
+}
+.secondsleft {
+	font-size: 7em;
+	display: block;
+	margin: auto;
+	color: #00B5D9;
+	text-align: center;
+	font-weight: 700;
+}
+.playername, .lastanswer, .question  {
+	font-family: "Gotham SSm A","Gotham SSm B","Helvetica Neue",Helvetiva,Arial,sans-serif;
+	color: white;
+	font-size: 2em;
+	display: inline;
+}
+.playername {
+	display: block;
+	margin-left: 150px;
+}
+.rightwrong {
+	font-family: "Gotham SSm A","Gotham SSm B","Helvetica Neue",Helvetiva,Arial,sans-serif;
+	color: red;
+	text-transform: uppercase;
+	font-size: 2em;
+	text-align: center;
+	display: inline;
+	margin-left: 15px;
+}
+.rightanswer {
+	font-size: 7em;
+	color: green;
+}
+.answersrow1 {
+	margin-bottom: 30px;
+}
+.answersrow1 > div, .answersrow2 > div {
+	text-align: center;
+}
+div.topcontent > .answersbox {
+	border: 1px #414141 solid;
+	border-style: double;
+	padding: 0 25px 25px 25px;
+	width: 30%;
+	box-shadow: 1px 1px 6px #888888;
+}
+.youranswers {
+	margin: 10px auto 32px auto;
+	text-align: center;
+	font-size: 3em;
+
+}
+.answercircle {
+	border-radius: 50%;
+	height: 100px;
+	width: 100px;
+}
+.currentquestion {
+	color: #05AEF5;
+}
+.unanswered i {
+	font-size: 2.3em;
+}
+
+.unanswered > span {
+	font-size: 31px;
+	line-height: 3.5em;
+}
+.wronganswer {
+	font-size: 7em;
+	color: red;
+}
+.hider {
+	visibility: hidden;
+}
+.avatar {
+	border-radius: 50%;
+  border: 6px solid white;
+	width: 100px;
+	height: 100px;
+	background: white;
+	display: inline-block;
+	float: left;
+}
+.playerscore {
+	vertical-align: bottom;
+	color: #DAB201;
+	font-size: 3.5em;
+	display: inline-block;
+	text-align: left;
+	margin-left: 100px;
+	margin-top: 5px;
+}
+.qcontent {
+	margin: 50px;
+}
+.qimage img {
+	width: 80%;
+	float: right;
+}
+.question {
+	display: block;
+	text-align: center;
+	margin: 50px 0 150px 0;
+	font-size: 48px;
+}
+button.incorrect {
+	background-color: #E50909;
+}
+button.correct {
+	background-color: #25B64F;
+	padding: 0;
+	border: 2px #1D5D1D solid;
+}
+.multiplechoices div > button:disabled {
+	opacity: 1;
+}
+.multiplechoices {
+	padding: 30px;
+}
+.multiplechoices > div {
+	margin: 0 auto;
+}
+.multiplechoices div button {
+	height: 175px;
+	width: 400px;
+	font-size: 160%;
+	font-weight: 500;
+	display: block;
+	margin: 0 auto;
+}
+.modalbox {
+	margin-top: 200px;
+	border: 1px solid gray;
+}
+.finalstats {
+	margin: 85px auto;
+}
+.resultsgif {
+	display: none;
+}
+button.resetbutton {
+	display: none;
+	margin: 70px auto 25px auto;
+	background-color: #014EBE;
+	height: 75px;
+	color: white;
+	font-size: 2em;
+	font-weight: 100;
+	border-radius: 5px;
+}
