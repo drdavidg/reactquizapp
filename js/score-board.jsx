@@ -1,6 +1,6 @@
 var React = require('react');
 
-var ScoreBoard = React.createClass({
+module.exports = React.createClass({
 	render: function() {
 			var answerResults = this.props.results.map(function(result, i) {
 				return (
@@ -18,5 +18,3 @@ var ScoreBoard = React.createClass({
 			);
 	}
 });
-
-module.exports = ScoreBoard;

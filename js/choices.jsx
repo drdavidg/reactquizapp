@@ -1,6 +1,6 @@
 var React = require('react');
 
-var Choices = React.createClass({
+module.exports = React.createClass({
 	render: function() {
 		var clickHandler = this.props.onClick;
 		var styles = {
@@ -27,5 +27,3 @@ var Choices = React.createClass({
 		);
 	}
 });
-
-module.exports = Choices;

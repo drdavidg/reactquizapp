@@ -1,6 +1,6 @@
 var React = require('react');
 
-var QuestionImage = React.createClass({
+module.exports = React.createClass({
 	render: function() {
 		var imageStyle = {
 			width: '30%',
@@ -11,5 +11,3 @@ var QuestionImage = React.createClass({
 		);
 	}
 });
-
-module.exports = QuestionImage;

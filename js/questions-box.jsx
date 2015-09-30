@@ -1,8 +1,15 @@
 var React = require('react');
 var ReactFireMixin = require('reactfire');
-var FinalScore = require('final-score');
+var FinalScore = require('./final-score');
+var QuestionPrompt = require('./questionprompt');
+var Timer = require('./timer');
+var Score = require('./score');
+var Choices = require('./choices');
+var QuestionImage = require('./question-image');
+var ScoreBoard = require('./score-board');
 
-var QuestionsBox = React.createClass({
+
+module.exports = React.createClass({
 	getInitialState: function() {
 		return {
 			currentQuestion: 0,
@@ -104,5 +111,3 @@ var QuestionsBox = React.createClass({
 		);
 	}
 });
-
-module.exports = QuestionsBox;

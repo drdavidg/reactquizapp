@@ -20477,10 +20477,16 @@
 	
 	var React = __webpack_require__(1);
 	var ReactFireMixin = __webpack_require__(158);
-	var FinalScore = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"final-score\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	var FinalScore = __webpack_require__(159);
+	var QuestionPrompt = __webpack_require__(160);
+	var Timer = __webpack_require__(161);
+	var Score = __webpack_require__(162);
+	var Choices = __webpack_require__(163);
+	var QuestionImage = __webpack_require__(164);
+	var ScoreBoard = __webpack_require__(165);
 	
-	var QuestionsBox = React.createClass({
-		displayName: 'QuestionsBox',
+	module.exports = React.createClass({
+		displayName: 'exports',
 	
 		getInitialState: function getInitialState() {
 			return {
@@ -20580,8 +20586,6 @@
 			);
 		}
 	});
-	
-	module.exports = QuestionsBox;
 
 /***/ },
 /* 158 */
@@ -20752,6 +20756,190 @@
 	
 	  return ReactFireMixin;
 	}));
+
+/***/ },
+/* 159 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	
+	module.exports = React.createClass({
+		displayName: 'exports',
+	
+		render: function render() {
+			return React.createElement(
+				'h1',
+				null,
+				'FINAL Score: ',
+				this.props.score
+			);
+		}
+	});
+
+/***/ },
+/* 160 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	
+	module.exports = React.createClass({
+		displayName: 'exports',
+	
+		render: function render() {
+			return React.createElement(
+				'h1',
+				null,
+				this.props.question
+			);
+		}
+	});
+
+/***/ },
+/* 161 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	
+	module.exports = React.createClass({
+		displayName: 'exports',
+	
+		render: function render() {
+			return React.createElement(
+				'h2',
+				null,
+				'Time Left: ',
+				this.props.timeLeft
+			);
+		}
+	});
+
+/***/ },
+/* 162 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	
+	module.exports = React.createClass({
+		displayName: 'exports',
+	
+		render: function render() {
+			return React.createElement(
+				'h1',
+				null,
+				'Current Score: ',
+				this.props.score
+			);
+		}
+	});
+
+/***/ },
+/* 163 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	
+	module.exports = React.createClass({
+		displayName: 'exports',
+	
+		render: function render() {
+			var clickHandler = this.props.onClick;
+			var styles = {
+				height: '100px',
+				width: '300px',
+				fontSize: '160%',
+				fontWeight: '500',
+				margin: '0 auto'
+			};
+	
+			var choices = this.props.choices.map(function (choice, i) {
+				return React.createElement(
+					'div',
+					{ key: i },
+					React.createElement(
+						'button',
+						{ style: styles, className: 'button-xlarge pure-button', onClick: clickHandler.bind(null, i) },
+						choice
+					)
+				);
+			});
+	
+			// es6:
+			// var choices = this.props.choices.map((choice, i) => <li key={i}>{choice}</li>);
+	
+			return React.createElement(
+				'div',
+				null,
+				choices
+			);
+		}
+	});
+
+/***/ },
+/* 164 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	
+	module.exports = React.createClass({
+		displayName: 'exports',
+	
+		render: function render() {
+			var imageStyle = {
+				width: '30%',
+				float: 'right'
+			};
+			return React.createElement('img', { style: imageStyle, src: "img/" + (this.props.currentQuestion + 1) + ".jpg" });
+		}
+	});
+
+/***/ },
+/* 165 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var React = __webpack_require__(1);
+	
+	module.exports = React.createClass({
+		displayName: "exports",
+	
+		render: function render() {
+			var answerResults = this.props.results.map(function (result, i) {
+				return React.createElement(
+					"li",
+					{ key: i },
+					result ? "Correct" : "Incorrect"
+				);
+			});
+	
+			return React.createElement(
+				"div",
+				null,
+				React.createElement(
+					"h2",
+					null,
+					"Scoreboard Results"
+				),
+				React.createElement(
+					"ol",
+					null,
+					answerResults
+				)
+			);
+		}
+	});
 
 /***/ }
 /******/ ]);
