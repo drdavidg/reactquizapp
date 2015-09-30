@@ -20505,6 +20505,7 @@
 		},
 		mixins: [ReactFireMixin],
 		componentWillMount: function componentWillMount() {
+			var myFirebaseRef = new Firebase("https://dazzling-inferno-26.firebaseio.com/");
 			this.bindAsObject(new Firebase(myFirebaseRef + 'items/'), 'items');
 		},
 		choiceMade: function choiceMade(id) {

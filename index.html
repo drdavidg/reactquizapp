@@ -3,7 +3,6 @@
 	<head>
 		<meta charset="utf-8">
 		<title>Quizapp refactored to ReactJS</title>
-		<script src="build/bundle.js"></script>
 			<!-- Firebase -->
 			<script src="https://cdn.firebase.com/js/client/2.3.0/firebase.js"></script>
 			<!-- ReactFire -->
@@ -18,10 +17,12 @@
 		<div id="content"></div>
   <script type="text/jsx">
 
-//	var myFirebaseRef = new Firebase("https://dazzling-inferno-26.firebaseio.com/");
 
 
 	</script>
 
 	</body>
 </html>
+
+<!--was getting an error when this scrip tag was in the header.  because js was running before the div#content exists  -->
+<script src="build/bundle.js"></script>

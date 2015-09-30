@@ -27,6 +27,7 @@ module.exports = React.createClass({
 	},
 	mixins: [ ReactFireMixin ],
 	componentWillMount: function() {
+		var myFirebaseRef = new Firebase("https://dazzling-inferno-26.firebaseio.com/");
 		this.bindAsObject(new Firebase(myFirebaseRef + 'items/'), 'items');
 	},
 	choiceMade: function(id) {
