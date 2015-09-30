@@ -1,3 +1,5 @@
+var React = require('react');
+
 var Score = React.createClass({
 	render: function () {
 		return (
@@ -5,3 +7,5 @@ var Score = React.createClass({
 		);
 	}
 });
+
+module.exports = Score;

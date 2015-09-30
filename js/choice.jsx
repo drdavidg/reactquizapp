@@ -1,3 +1,4 @@
+var React = require('react');
 
 var Choices = React.createClass({
 	render: function() {
@@ -26,3 +27,5 @@ var Choices = React.createClass({
 		);
 	}
 });
+
+module.exports = Choices;

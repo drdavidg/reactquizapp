@@ -1,3 +1,6 @@
+var React = require('react');
+var ReactFireMixin = require('reactfire');
+var FinalScore = require('final-score');
 
 var QuestionsBox = React.createClass({
 	getInitialState: function() {

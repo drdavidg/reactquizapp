@@ -1,4 +1,4 @@
-
+var React = require('react');
 
 var ScoreBoard = React.createClass({
 	render: function() {
@@ -18,3 +18,5 @@ var ScoreBoard = React.createClass({
 			);
 	}
 });
+
+module.exports = ScoreBoard;

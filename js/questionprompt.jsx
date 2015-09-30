@@ -1,3 +1,4 @@
+var React = require('react');
 
 
 var QuestionPrompt = React.createClass({
@@ -7,3 +8,6 @@ var QuestionPrompt = React.createClass({
 		);
 	}
 });
+
+
+module.exports = QuestionPrompt;

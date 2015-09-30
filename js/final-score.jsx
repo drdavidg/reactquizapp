@@ -1,4 +1,4 @@
-
+var React = require('react');
 
 var FinalScore = React.createClass({
 	render: function() {
@@ -7,3 +7,5 @@ var FinalScore = React.createClass({
 		);
 	}
 });
+
+module.exports = FinalScore;

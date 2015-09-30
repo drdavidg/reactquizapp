@@ -44,9 +44,10 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 	
 	var React = __webpack_require__(1);
+	var QuestionsBox = __webpack_require__(157);
 	
 	var quiz = [{
 		prompt: "What is Bran unable to do due to his injuries?",
@@ -20467,6 +20468,290 @@
 	module.exports = onlyChild;
 	
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+
+/***/ },
+/* 157 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	var ReactFireMixin = __webpack_require__(158);
+	var FinalScore = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"final-score\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	
+	var QuestionsBox = React.createClass({
+		displayName: 'QuestionsBox',
+	
+		getInitialState: function getInitialState() {
+			return {
+				currentQuestion: 0,
+				answerSelections: [],
+				timeLeft: this.props.timePerQuestion,
+				score: 0,
+				quizActive: true,
+				results: []
+			};
+		},
+		getDefaultProps: function getDefaultProps() {
+			return {
+				timePerQuestion: 10
+			};
+		},
+		mixins: [ReactFireMixin],
+		componentWillMount: function componentWillMount() {
+			this.bindAsObject(new Firebase(myFirebaseRef + 'items/'), 'items');
+		},
+		choiceMade: function choiceMade(id) {
+			var answers = this.state.answerSelections.slice();
+			answers.push(id);
+			var choiceResults = this.state.results.slice();
+	
+			if (quiz[this.state.currentQuestion].answer == id) {
+				//correct
+				var updatedScore = this.calcScore(this.state.timeLeft);
+				choiceResults.push(true);
+			} else {
+				//incorrect choice
+				updatedScore = this.state.score;
+				choiceResults.push(false);
+			}
+	
+			if (quiz.length - 1 <= this.state.currentQuestion) {
+				clearInterval(this.timer);
+				quizActive = false;
+			} else {
+				quizActive = true;
+			}
+	
+			var newState = {
+				currentQuestion: this.state.currentQuestion + 1,
+				answerSelections: answers,
+				timeLeft: this.props.timePerQuestion,
+				score: updatedScore,
+				quizActive: quizActive,
+				results: choiceResults
+			};
+			this.setState(newState);
+		},
+		calcScore: function calcScore(timeLeft) {
+			var newScore = this.state.score + 10;
+			if (this.state.timeLeft > 5) {
+				newScore += 2;
+			}
+			return newScore;
+		},
+		tick: function tick() {
+			var newTimerState = {
+				currentQuestion: this.state.currentQuestion,
+				answerSelections: this.state.answerSelections,
+				timeLeft: this.state.timeLeft - 1,
+				score: this.state.score,
+				quizActive: true,
+				results: this.state.results
+			};
+			this.setState(newTimerState);
+		},
+		componentDidMount: function componentDidMount() {
+	
+			this.timer = setInterval(this.tick, 1000);
+		},
+		componentDidUpdate: function componentDidUpdate() {
+			if (this.state.timeLeft < 0) {
+				//check if time expired
+				this.choiceMade(false);
+			}
+		},
+		render: function render() {
+			console.log(this.state);
+			var question = this.props.quiz[this.state.currentQuestion];
+			return React.createElement(
+				'div',
+				{ className: 'questionsbox' },
+				this.state.quizActive && React.createElement(
+					'div',
+					null,
+					React.createElement(QuestionPrompt, { question: question.prompt }),
+					React.createElement(Choices, { choices: question.choices, onClick: this.choiceMade }),
+					React.createElement(Timer, { timeLeft: this.state.timeLeft }),
+					React.createElement(Score, { score: this.state.score }),
+					React.createElement(QuestionImage, { currentQuestion: this.state.currentQuestion })
+				) || React.createElement(FinalScore, { score: this.state.score }),
+				React.createElement(ScoreBoard, { results: this.state.results })
+			);
+		}
+	});
+	
+	module.exports = QuestionsBox;
+
+/***/ },
+/* 158 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+	 * ReactFire is an open-source JavaScript library that allows you to add a
+	 * realtime data source to your React apps by providing and easy way to let
+	 * Firebase populate the state of React components.
+	 *
+	 * ReactFire 0.4.0
+	 * https://github.com/firebase/reactfire/
+	 * License: MIT
+	 */
+	
+	;(function (root, factory) {
+	  "use strict";
+	  if (true) {
+	    // AMD
+	    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function() {
+	      return (root.ReactFireMixin = factory());
+	    }.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	  } else if (typeof exports === "object") {
+	    // CommonJS
+	    module.exports = factory();
+	  } else {
+	    // Global variables
+	    root.ReactFireMixin = factory();
+	  }
+	}(this, function() {
+	  "use strict";
+	
+	var ReactFireMixin = {
+	  /********************/
+	  /*  MIXIN LIFETIME  */
+	  /********************/
+	  /* Initializes the Firebase binding refs array */
+	  componentWillMount: function() {
+	    this.firebaseRefs = {};
+	    this.firebaseListeners = {};
+	  },
+	
+	  /* Removes any remaining Firebase bindings */
+	  componentWillUnmount: function() {
+	    for (var key in this.firebaseRefs) {
+	      if (this.firebaseRefs.hasOwnProperty(key)) {
+	        this.unbind(key);
+	      }
+	    }
+	  },
+	
+	
+	  /*************/
+	  /*  BINDING  */
+	  /*************/
+	  /* Creates a binding between Firebase and the inputted bind variable as an array */
+	  bindAsArray: function(firebaseRef, bindVar, cancelCallback) {
+	    this._bind(firebaseRef, bindVar, cancelCallback, true);
+	  },
+	
+	  /* Creates a binding between Firebase and the inputted bind variable as an object */
+	  bindAsObject: function(firebaseRef, bindVar, cancelCallback) {
+	    this._bind(firebaseRef, bindVar, cancelCallback, false);
+	  },
+	
+	  /* Creates a binding between Firebase and the inputted bind variable as either an array or object */
+	  _bind: function(firebaseRef, bindVar, cancelCallback, bindAsArray) {
+	    this._validateBindVar(bindVar);
+	
+	    var errorMessage, errorCode;
+	    if (Object.prototype.toString.call(firebaseRef) !== "[object Object]") {
+	      errorMessage = "firebaseRef must be an instance of Firebase";
+	      errorCode = "INVALID_FIREBASE_REF";
+	    }
+	    else if (typeof bindAsArray !== "boolean") {
+	      errorMessage = "bindAsArray must be a boolean. Got: " + bindAsArray;
+	      errorCode = "INVALID_BIND_AS_ARRAY";
+	    }
+	
+	    if (typeof errorMessage !== "undefined") {
+	      var error = new Error("ReactFire: " + errorMessage);
+	      error.code = errorCode;
+	      throw error;
+	    }
+	
+	    this.firebaseRefs[bindVar] = firebaseRef.ref();
+	    this.firebaseListeners[bindVar] = firebaseRef.on("value", function(dataSnapshot) {
+	      var newState = {};
+	      if (bindAsArray) {
+	        newState[bindVar] = this._toArray(dataSnapshot.val());
+	      }
+	      else {
+	        newState[bindVar] = dataSnapshot.val();
+	      }
+	      this.setState(newState);
+	    }.bind(this), cancelCallback);
+	  },
+	
+	  /* Removes the binding between Firebase and the inputted bind variable */
+	  unbind: function(bindVar) {
+	    this._validateBindVar(bindVar);
+	
+	    if (typeof this.firebaseRefs[bindVar] === "undefined") {
+	      var error = new Error("ReactFire: unexpected value for bindVar. \"" + bindVar + "\" was either never bound or has already been unbound");
+	      error.code = "UNBOUND_BIND_VARIABLE";
+	      throw error;
+	    }
+	
+	    this.firebaseRefs[bindVar].off("value", this.firebaseListeners[bindVar]);
+	    delete this.firebaseRefs[bindVar];
+	    delete this.firebaseListeners[bindVar];
+	  },
+	
+	
+	  /*************/
+	  /*  HELPERS  */
+	  /*************/
+	  /* Validates the name of the variable which is being bound */
+	  _validateBindVar: function(bindVar) {
+	    var errorMessage;
+	
+	    if (typeof bindVar !== "string") {
+	      errorMessage = "bindVar must be a string. Got: " + bindVar;
+	    }
+	    else if (bindVar.length === 0) {
+	      errorMessage = "bindVar must be a non-empty string. Got: \"\"";
+	    }
+	    else if (bindVar.length > 768) {
+	      // Firebase can only stored child paths up to 768 characters
+	      errorMessage = "bindVar is too long to be stored in Firebase. Got: " + bindVar;
+	    }
+	    else if (/[\[\].#$\/\u0000-\u001F\u007F]/.test(bindVar)) {
+	      // Firebase does not allow node keys to contain the following characters
+	      errorMessage = "bindVar cannot contain any of the following characters: . # $ ] [ /. Got: " + bindVar;
+	    }
+	
+	    if (typeof errorMessage !== "undefined") {
+	      var error = new Error("ReactFire: " + errorMessage);
+	      error.code = "INVALID_BIND_VARIABLE";
+	      throw error;
+	    }
+	  },
+	
+	
+	  /* Returns true if the inputted object is a JavaScript array */
+	  _isArray: function(obj) {
+	    return (Object.prototype.toString.call(obj) === "[object Array]");
+	  },
+	
+	  /* Converts a Firebase object to a JavaScript array */
+	  _toArray: function(obj) {
+	    var out = [];
+	    if (obj) {
+	      if (this._isArray(obj)) {
+	        out = obj;
+	      }
+	      else if (typeof(obj) === "object") {
+	        for (var key in obj) {
+	          if (obj.hasOwnProperty(key)) {
+	            out.push(obj[key]);
+	          }
+	        }
+	      }
+	    }
+	    return out;
+	  }
+	};
+	
+	  return ReactFireMixin;
+	}));
 
 /***/ }
 /******/ ]);

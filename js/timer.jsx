@@ -1,4 +1,4 @@
-
+var React = require('react');
 
 var Timer = React.createClass({
 	render: function() {
@@ -7,3 +7,5 @@ var Timer = React.createClass({
 		);
 	}
 });
+
+module.exports = Timer;

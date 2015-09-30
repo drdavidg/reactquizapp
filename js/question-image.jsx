@@ -1,3 +1,5 @@
+var React = require('react');
+
 var QuestionImage = React.createClass({
 	render: function() {
 		var imageStyle = {
@@ -9,3 +11,5 @@ var QuestionImage = React.createClass({
 		);
 	}
 });
+
+module.exports = QuestionImage;

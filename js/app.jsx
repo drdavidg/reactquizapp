@@ -55,5 +55,6 @@ var quiz = [
 ];
 
 React.render(
-	<QuestionsBox quiz={quiz} />, document.getElementById('content')
+	<QuestionsBox quiz={quiz} />,
+	document.getElementById('content')
 	);
