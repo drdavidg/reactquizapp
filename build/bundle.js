@@ -20512,8 +20512,8 @@
 			var answers = this.state.answerSelections.slice();
 			answers.push(id);
 			var choiceResults = this.state.results.slice();
-	
-			if (quiz[this.state.currentQuestion].answer == id) {
+			var quizActive;
+			if (this.props.quiz[this.state.currentQuestion].answer == id) {
 				//correct
 				var updatedScore = this.calcScore(this.state.timeLeft);
 				choiceResults.push(true);
@@ -20522,8 +20522,7 @@
 				updatedScore = this.state.score;
 				choiceResults.push(false);
 			}
-	
-			if (quiz.length - 1 <= this.state.currentQuestion) {
+			if (this.props.quiz.length - 1 <= this.state.currentQuestion) {
 				clearInterval(this.timer);
 				quizActive = false;
 			} else {
@@ -20559,7 +20558,6 @@
 			this.setState(newTimerState);
 		},
 		componentDidMount: function componentDidMount() {
-	
 			this.timer = setInterval(this.tick, 1000);
 		},
 		componentDidUpdate: function componentDidUpdate() {
@@ -20569,7 +20567,6 @@
 			}
 		},
 		render: function render() {
-			console.log(this.state);
 			var question = this.props.quiz[this.state.currentQuestion];
 			return React.createElement(
 				'div',

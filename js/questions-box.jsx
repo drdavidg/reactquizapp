@@ -8,7 +8,6 @@ var Choices = require('./choices');
 var QuestionImage = require('./question-image');
 var ScoreBoard = require('./score-board');
 
-
 module.exports = React.createClass({
 	getInitialState: function() {
 		return {
@@ -34,9 +33,8 @@ module.exports = React.createClass({
 		var answers = this.state.answerSelections.slice();
 		answers.push(id);
 		var choiceResults = this.state.results.slice();
-
-
-		if (quiz[this.state.currentQuestion].answer == id) { //correct
+		var quizActive;
+		if (this.props.quiz[this.state.currentQuestion].answer == id) { //correct
 			var updatedScore = this.calcScore(this.state.timeLeft);
 			choiceResults.push(true);
 		}
@@ -44,9 +42,7 @@ module.exports = React.createClass({
 			updatedScore = this.state.score;
 			choiceResults.push(false);
 		}
-
-
-		if ((quiz.length - 1) <= this.state.currentQuestion) {
+		if ((this.props.quiz.length - 1) <= this.state.currentQuestion) {
 			clearInterval(this.timer);
 			quizActive = false;
 		}
@@ -84,7 +80,6 @@ module.exports = React.createClass({
 		this.setState(newTimerState);
 	},
 	componentDidMount: function() {
-
 		this.timer = setInterval(this.tick, 1000);
 	},
 	componentDidUpdate: function() {
@@ -93,7 +88,6 @@ module.exports = React.createClass({
 		}
 	},
 	render: function() {
-		console.log(this.state);
 		var question = this.props.quiz[this.state.currentQuestion];
 		return (
 			<div className="questionsbox">
