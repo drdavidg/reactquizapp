@@ -13,7 +13,10 @@ module.exports = React.createClass({
 
 		var choices = this.props.choices.map(function(choice, i) {
 			return (
-				<div key={i}><button style={styles} className='button-xlarge pure-button' onClick={clickHandler.bind(null, i)}>{choice}</button></div>
+				<div key={i}>
+					<button style={styles} className='button-xlarge pure-button'
+						onClick={clickHandler.bind(null, i)}>{choice}</button>
+				</div>
 			);
 		});
 
