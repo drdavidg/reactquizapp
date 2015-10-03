@@ -54,7 +54,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "42fd47cc45ff65c335c8"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "6751846f7c222ff636cf"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -20954,15 +20954,18 @@
 	
 		getInitialState: function getInitialState() {
 			return {
-				currentQuestion: 0, //save to FB
 				answerSelections: [], //save to FB
-				timeLeft: this.props.timePerQuestion,
+				answers: [],
 				score: 0, //save to FB
-				quizActive: true,
 				results: [], //save to FB
+				timeLeft: this.props.timePerQuestion,
+				currentQuestion: 0,
+				quizActive: true,
 				loaded: false,
-				items: {},
-				quiz: {}
+				games: {},
+				quiz: {},
+				gameLogged: false,
+				currentGameKey: ""
 			};
 		},
 		getDefaultProps: function getDefaultProps() {
@@ -20972,19 +20975,19 @@
 		},
 		mixins: [ReactFire],
 		componentWillMount: function componentWillMount() {
-			var fb = new Firebase(rootURL + 'items/');
-			this.bindAsObject(fb, 'items');
+			var fbGames = new Firebase(rootURL + 'games/');
+			this.bindAsArray(fbGames, 'games');
 	
-			var fbquiz = new Firebase(rootURL + 'quiz/');
-			this.bindAsArray(fbquiz, 'quiz');
-			fbquiz.on('value', this.handleDataLoaded);
+			var fbQuiz = new Firebase(rootURL + 'quiz/');
+			this.bindAsArray(fbQuiz, 'quiz');
+			fbQuiz.on('value', this.handleDataLoaded);
 		},
 		handleDataLoaded: function handleDataLoaded() {
 			this.setState({ loaded: true });
 			console.log("data loaded");
 		},
 		choiceMade: function choiceMade(id) {
-			var answers = this.state.answerSelections.slice();
+			var answers = this.state.answers;
 			answers.push(id);
 			var choiceResults = this.state.results.slice();
 			var quizActive;
@@ -21003,14 +21006,30 @@
 			} else {
 				quizActive = true;
 			}
+			if (this.state.gameLogged) {
+				var updateFB = this.firebaseRefs.games.parent().child('games/' + this.state.currentGameKey + '/'); //TODO is there a better way than this node traversal?
+				console.log(updateFB.toString());
+				updateFB.update({ answers: answers });
+			} else {
+				var firstPush = this.firebaseRefs.games.push({ answers: answers });
+				console.log(firstPush.key());
+				this.setState({
+					gameLogged: true,
+					currentGameKey: firstPush.key()
+				});
+			}
 	
+			// this.firebaseRefs.choiceResults.push({
+			// 	results: choiceResults
+			// });
+			// this.firebaseRefs.games.update({
+			// 	score: updatedScore,
+			// });
+	
+			//update state with data i'm not storing in firebase
 			var newState = {
 				currentQuestion: this.state.currentQuestion + 1,
-				answerSelections: answers,
-				timeLeft: this.props.timePerQuestion,
-				score: updatedScore,
-				quizActive: quizActive,
-				results: choiceResults
+				timeLeft: this.props.timePerQuestion
 			};
 			this.setState(newState);
 		},
